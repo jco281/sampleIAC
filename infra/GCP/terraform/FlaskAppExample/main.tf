@@ -18,6 +18,9 @@ resource "google_app_engine_standard_app_version" "app" {
       source_url = "gs://${google_storage_bucket.bucket.name}/app.zip"
     }
   }
+  entrypoint {
+    shell = "gunicorn -b :$PORT app:app"
+  }
 }
 
 resource "google_storage_bucket" "bucket" {
