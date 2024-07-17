@@ -22,13 +22,13 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: /infra/GCP/terraform/bucket
+        working-directory: infra/GCP/terraform/bucket
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: /infra/GCP/terraform/bucket
+        working-directory: infra/GCP/terraform/bucket
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
         run: terraform apply -auto-approve
-        working-directory: /infra/GCP/terraform/bucket
+        working-directory: infra/GCP/terraform/bucket
