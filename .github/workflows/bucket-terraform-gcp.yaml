@@ -52,10 +52,10 @@ jobs:
       - name: Show Plan and Output to Job Summary
         id: show-plan
         run: |
-          terraform show -no-color ./infra/GCP/terraform/bucket/tfplan.out > plan.txt
-          cat plan.txt
+          terraform show -no-color ./infra/GCP/terraform/bucket/tfplan.out > ./infra/GCP/terraform/bucket/plan.txt
+          cat ./infra/GCP/terraform/bucket/plan.txt
           echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
-          cat plan.txt >> $GITHUB_STEP_SUMMARY
+          cat ./infra/GCP/terraform/bucket/plan.txt >> $GITHUB_STEP_SUMMARY
         shell: bash
 
       - name: Terraform Apply
