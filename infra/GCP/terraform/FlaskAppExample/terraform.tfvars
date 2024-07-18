@@ -1,2 +1,2 @@
 project          = "jeffovertonsamples"
-credentials_file = "credentials.json"
+source_dir       = "C:\\Users\\jeeff\\IdeaProjects\\sampleIAC\\infra\\GCP\\terraform\\FlaskAppExample\\src"

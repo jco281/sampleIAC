@@ -8,8 +8,7 @@ variable "region" {
   type        = string
   default     = "us-central1"
 }
-
-variable "credentials_file" {
-  description = "Path to the GCP credentials file"
+variable "source_dir" {
+  description = "Path to the source directory containing application files"
   type        = string
 }

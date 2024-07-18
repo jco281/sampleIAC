@@ -14,8 +14,3 @@ variable "zone" {
   type        = string
   default     = "us-central1-a"
 }
-
-variable "credentials_file" {
-  description = "Path to the GCP credentials file"
-  type        = string
-}

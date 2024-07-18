@@ -1,17 +1,16 @@
 provider "google" {
   project = var.project
   region  = var.region
-  credentials = file(var.credentials_file)
 }
 
 resource "google_compute_instance" "default" {
   name         = "terraform-instance"
-  machine_type = "f1-micro"
+  machine_type = "e2-micro"
   zone         = var.zone
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "debian-11-bullseye-v20240709"
     }
   }
 
