@@ -30,10 +30,12 @@ jobs:
           node-version: '20'
 
       - name: Start Docker
-        run: sudo systemctl start docker
+        run: sudo service docker start
 
       - name: Add user to Docker group
-        run: sudo usermod -aG docker $USER
+        run: |
+          sudo usermod -aG docker $USER
+          newgrp docker
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
