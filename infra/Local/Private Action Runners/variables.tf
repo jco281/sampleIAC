@@ -1,13 +1,7 @@
 variable "namespace" {
   description = "Namespace for GitHub Actions Runner"
   type        = string
-  default     = "github-actions"
-}
-
-variable "runner_name" {
-  description = "Name of the GitHub Actions Runner"
-  type        = string
-  default     = "local-runner"
+  default     = "arc-runners"
 }
 
 variable "repository_url" {
@@ -16,7 +10,8 @@ variable "repository_url" {
   default     = "https://github.com/jco281/sampleIAC"
 }
 
-variable "runner_token" {
-  description = "GitHub Actions Runner token"
+variable "github_pat" {
+  description = "GitHub Personal Access Token"
   type        = string
+  sensitive   = true
 }
