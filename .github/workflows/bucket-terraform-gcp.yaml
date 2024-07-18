@@ -43,9 +43,11 @@ jobs:
         run: terraform init
         working-directory: ./infra/GCP/terraform/bucket
 
-#      - name: Terraform Plan
-#        run: terraform plan
-#        working-directory: ./infra/GCP/terraform/bucket
+      - name: Terraform Plan
+        env:
+          TF_LOG: DEBUG
+        run: terraform plan
+        working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
