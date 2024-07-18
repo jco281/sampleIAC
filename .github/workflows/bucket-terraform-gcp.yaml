@@ -10,7 +10,9 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: self-hosted
-
+    defaults:
+      run:
+        working-directory: ./infra/GCP/terraform/bucket
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,15 +22,21 @@ jobs:
         with:
           terraform_version: 1.9.2
 
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/740598049160/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'terraform-github@jeffovertonsamples.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
       - name: Terraform Init
         run: terraform init
-        working-directory: infra/GCP/terraform/bucket
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: infra/GCP/terraform/bucket
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
         run: terraform apply -auto-approve
-        working-directory: infra/GCP/terraform/bucket
