@@ -33,11 +33,8 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/740598049160/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'terraform-github@jeffovertonsamples.iam.gserviceaccount.com'
-
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: Terraform Init
         run: terraform init
@@ -46,14 +43,23 @@ jobs:
       - name: Terraform Plan
         env:
           TF_LOG: INFO
-        run: terraform plan
+        run: terraform plan -out=tfplan.out
         working-directory: ./infra/GCP/terraform/bucket
+
+      - name: Show Plan and Output to Job Summary
+        id: show-plan
+        run: |
+          terraform show -no-color ./infra/GCP/terraform/bucket/tfplan.out > plan.txt
+          cat plan.txt
+          echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          cat plan.txt >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
         env:
           TF_LOG: INFO
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve ./infra/GCP/terraform/bucket/tfplan.out
         working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Destroy

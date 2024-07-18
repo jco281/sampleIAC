@@ -16,20 +16,56 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: APT updates and install zip
+        run: sudo apt-get update & sudo apt-get install unzip -y
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.2
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'terraform-github@jeffovertonsamples.iam.gserviceaccount.com'
 
       - name: Terraform Init
         run: terraform init
         working-directory: ./infra/GCP/terraform/VM
 
       - name: Terraform Plan
-        run: terraform plan
+        id: tfplan
+        env:
+          TF_LOG: INFO
+        run: |
+          terraform plan -out=tfplan.out
         working-directory: ./infra/GCP/terraform/VM
+
+      - name: Show Plan and Output to Job Summary
+        id: show-plan
+        run: |
+          terraform show -no-color ./infra/GCP/terraform/VM/tfplan.out > plan.txt
+          cat plan.txt
+          echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          cat plan.txt >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+        env:
+          TF_LOG: INFO
+        run: terraform apply -auto-approve ./infra/GCP/terraform/VM/tfplan.out
+        working-directory: ./infra/GCP/terraform/VM
+
+      - name: Terraform Destroy
+        if: github.ref == 'refs/heads/master'
+        env:
+          TF_LOG: INFO
+        run: terraform destroy -auto-approve
         working-directory: ./infra/GCP/terraform/VM

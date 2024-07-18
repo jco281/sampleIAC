@@ -11,15 +11,22 @@ jobs:
   build:
     name: Build and Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: APT updates and install zip
+        run: sudo apt-get update & sudo apt-get install unzip -y
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/740598049160/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'terraform-github@jeffovertonsamples.iam.gserviceaccount.com'
 
       - name: 'Set up Cloud SDK'
@@ -35,7 +42,8 @@ jobs:
         run: cd infra/GCP/terraform/FlaskAppExample && docker push gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest
 
       - name: Upload app to GCS
-        run: cd infra/GCP/terraform/FlaskAppExample && gsutil cp app.zip gs://${{ secrets.GCP_PROJECT }}-app-bucket/
+        working-directory: ./infra/GCP/terraform/FlaskAppExample
+        run: gsutil cp app.zip gs://${{ secrets.GCP_PROJECT }}-app-bucket/
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -47,10 +55,26 @@ jobs:
         working-directory: ./infra/GCP/terraform/FlaskAppExample
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out=tfplan.out
         working-directory: ./infra/GCP/terraform/FlaskAppExample
+
+      - name: Show Plan and Output to Job Summary
+        id: show-plan
+        run: |
+          terraform show -no-color ./infra/GCP/terraform/FlaskAppExample/tfplan.out > plan.txt
+          cat plan.txt
+          echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          cat plan.txt >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve ./infra/GCP/terraform/FlaskAppExample/tfplan.out
+        working-directory: ./infra/GCP/terraform/FlaskAppExample
+
+      - name: Terraform Destroy
+        if: github.ref == 'refs/heads/master'
+        env:
+          TF_LOG: INFO
+        run: terraform destroy -auto-approve
         working-directory: ./infra/GCP/terraform/FlaskAppExample
