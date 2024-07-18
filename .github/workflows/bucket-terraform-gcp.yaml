@@ -49,11 +49,16 @@ jobs:
         run: terraform plan -out=tfplan.out
         working-directory: ./infra/GCP/terraform/bucket
 
-      - name: Show Plan and Output to Job Summary
+      - name: Terraform Show
         id: show-plan
+        env:
+          TF_LOG: DEBUG
         run: |
           terraform show -no-color ./infra/GCP/terraform/bucket/tfplan.out > ./infra/GCP/terraform/bucket/plan.txt
-          cat ./infra/GCP/terraform/bucket/plan.txt
+        working-directory: ./infra/GCP/terraform/bucket
+
+      - name: Output Plan to Job Summary
+        run: |
           echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
           cat ./infra/GCP/terraform/bucket/plan.txt >> $GITHUB_STEP_SUMMARY
         shell: bash
