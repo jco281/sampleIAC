@@ -10,9 +10,6 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: arc-runner-set
-    defaults:
-      run:
-        working-directory: ./infra/GCP/terraform/bucket
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,10 +30,17 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
         run: terraform apply -auto-approve
+        working-directory: ./infra/GCP/terraform/bucket
+      - name: Terraform Destory
+        if: github.ref == 'refs/heads/master'
+        run: terraform destroy -auto-approve
+        working-directory: ./infra/GCP/terraform/bucket
