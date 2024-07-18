@@ -7,7 +7,7 @@ on:
       - .github/workflows/vm-terraform-gcp.yaml
 
 jobs:
-  terraform:
+  terraform-compute-engine:
     name: 'Terraform'
     runs-on: arc-runner-set
     permissions:
@@ -53,10 +53,11 @@ jobs:
 
       - name: Terraform Show
         id: show-plan
+        working-directory: ./infra/GCP/terraform/VM
         env:
           TF_LOG: DEBUG
         run: |
-          terraform show -no-color ./infra/GCP/terraform/VM/tfplan.out > ./infra/GCP/terraform/VM/plan.txt
+          terraform show -no-color tfplan.out > plan.txt
 
       - name: Output Plan to Job Summary
         run: |

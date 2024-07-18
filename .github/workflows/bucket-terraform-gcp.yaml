@@ -7,8 +7,8 @@ on:
       - .github/workflows/bucket-terraform-gcp.yaml
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  terraform-bucket-GCP:
+    name: 'Terraform - Test GCS'
     runs-on: arc-runner-set
     permissions:
       contents: 'read'
@@ -51,10 +51,11 @@ jobs:
 
       - name: Terraform Show
         id: show-plan
+        working-directory: ./infra/GCP/terraform/bucket
         env:
           TF_LOG: DEBUG
         run: |
-          terraform show -no-color ./infra/GCP/terraform/bucket/tfplan.out > ./infra/GCP/terraform/bucket/plan.txt
+          terraform show -no-color tfplan.out > plan.txt
 
       - name: Output Plan to Job Summary
         run: |
