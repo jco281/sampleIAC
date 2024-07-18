@@ -10,6 +10,9 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: arc-runner-set
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
