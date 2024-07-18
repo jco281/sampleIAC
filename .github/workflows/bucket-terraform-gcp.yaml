@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: APT updates and install zip
+        run: apt-get update & apt-get install unzip -y
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:

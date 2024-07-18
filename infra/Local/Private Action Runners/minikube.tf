@@ -84,7 +84,7 @@ resource "helm_release" "runner_scale_set" {
 
   set {
     name  = "minRunners"
-    value = 0
+    value = 1
   }
 
   set {
