@@ -13,8 +13,3 @@ variable "bucket_name" {
   description = "The name of the GCP bucket"
   type        = string
 }
-
-variable "credentials_file" {
-  description = "Path to the GCP credentials file"
-  type        = string
-}

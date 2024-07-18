@@ -45,15 +45,20 @@ jobs:
 
       - name: Terraform Plan
         env:
-          TF_LOG: DEBUG
+          TF_LOG: INFO
         run: terraform plan
         working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
+        env:
+          TF_LOG: INFO
         run: terraform apply -auto-approve
         working-directory: ./infra/GCP/terraform/bucket
+
       - name: Terraform Destroy
         if: github.ref == 'refs/heads/master'
+        env:
+          TF_LOG: INFO
         run: terraform destroy -auto-approve
         working-directory: ./infra/GCP/terraform/bucket
