@@ -51,11 +51,15 @@ jobs:
           terraform plan -out=tfplan.out
         working-directory: ./infra/GCP/terraform/VM
 
-      - name: Show Plan and Output to Job Summary
+      - name: Terraform Show
         id: show-plan
+        env:
+          TF_LOG: DEBUG
         run: |
           terraform show -no-color ./infra/GCP/terraform/VM/tfplan.out > ./infra/GCP/terraform/VM/plan.txt
-          cat ./infra/GCP/terraform/VM/plan.txt
+
+      - name: Output Plan to Job Summary
+        run: |
           echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
           cat ./infra/GCP/terraform/VM/plan.txt >> $GITHUB_STEP_SUMMARY
         shell: bash
@@ -64,7 +68,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         env:
           TF_LOG: INFO
-        run: terraform apply -auto-approve ./infra/GCP/terraform/VM/tfplan.out
+        run: terraform apply -auto-approve "tfplan.out"
         working-directory: ./infra/GCP/terraform/VM
 
       - name: Terraform Destroy

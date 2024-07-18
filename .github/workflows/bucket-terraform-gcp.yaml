@@ -55,7 +55,6 @@ jobs:
           TF_LOG: DEBUG
         run: |
           terraform show -no-color ./infra/GCP/terraform/bucket/tfplan.out > ./infra/GCP/terraform/bucket/plan.txt
-        working-directory: ./infra/GCP/terraform/bucket
 
       - name: Output Plan to Job Summary
         run: |
@@ -67,7 +66,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         env:
           TF_LOG: INFO
-        run: terraform apply -auto-approve ./infra/GCP/terraform/bucket/tfplan.out
+        run: terraform apply -auto-approve "tfplan.out"
         working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Destroy
