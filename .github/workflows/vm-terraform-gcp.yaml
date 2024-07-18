@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - infra/GCP/terraform/VM/*
+      - .github/workflows/vm-terraform-gcp.yaml
 
 jobs:
   terraform:
@@ -34,6 +35,9 @@ jobs:
         with:
           workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'terraform-github@jeffovertonsamples.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: Terraform Init
         run: terraform init

@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - infra/GCP/terraform/FlaskAppExample/*
+      - .github/workflows/deploy-flask-app-gcp.yml
 
 jobs:
   build:
