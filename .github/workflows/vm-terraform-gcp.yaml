@@ -2,8 +2,6 @@ name: Terraform
 
 on:
   push:
-    branches:
-      - main
     paths:
       - infra/GCP/terraform/VM/*
       - .github/workflows/vm-terraform-gcp.yaml

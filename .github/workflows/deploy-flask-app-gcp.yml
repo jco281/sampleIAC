@@ -2,8 +2,6 @@ name: Deploy Flask App
 
 on:
   push:
-    branches:
-      - main
     paths:
       - infra/GCP/terraform/FlaskAppExample/*
       - .github/workflows/deploy-flask-app-gcp.yml
