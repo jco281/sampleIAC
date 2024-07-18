@@ -43,15 +43,15 @@ jobs:
         run: terraform init
         working-directory: ./infra/GCP/terraform/bucket
 
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: ./infra/GCP/terraform/bucket
+#      - name: Terraform Plan
+#        run: terraform plan
+#        working-directory: ./infra/GCP/terraform/bucket
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
         run: terraform apply -auto-approve
         working-directory: ./infra/GCP/terraform/bucket
-      - name: Terraform Destory
+      - name: Terraform Destroy
         if: github.ref == 'refs/heads/master'
         run: terraform destroy -auto-approve
         working-directory: ./infra/GCP/terraform/bucket
