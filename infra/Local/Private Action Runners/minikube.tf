@@ -47,15 +47,6 @@ resource "helm_release" "actions_runner_controller" {
   namespace        = kubernetes_namespace.arc_systems.metadata[0].name
   repository       = "oci://ghcr.io/actions/actions-runner-controller-charts"
   create_namespace = false
-  set {
-    name  = "githubConfigUrl"
-    value = var.repository_url
-  }
-
-  set {
-    name  = "githubConfigSecret.github_token"
-    value = kubernetes_secret.github_pat.metadata[0].name
-  }
 }
 
 # Create a secret for the GitHub PAT
