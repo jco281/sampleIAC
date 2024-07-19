@@ -5,7 +5,8 @@ on:
     paths:
       - infra/GCP/terraform/VM/*
       - .github/workflows/vm-terraform-gcp.yaml
-
+    branches:
+      - master
 jobs:
   terraform-compute-engine:
     name: 'Terraform'

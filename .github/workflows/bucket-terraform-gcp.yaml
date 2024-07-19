@@ -5,6 +5,8 @@ on:
     paths:
       - infra/GCP/terraform/bucket/*
       - .github/workflows/bucket-terraform-gcp.yaml
+    branches:
+      - master
 
 jobs:
   terraform-bucket-GCP:

@@ -5,6 +5,8 @@ on:
     paths:
       - infra/GCP/terraform/FlaskAppExample/*
       - .github/workflows/deploy-flask-app-gcp.yml
+    branches:
+      - master
 
 jobs:
   build-deploy-app-engine-flask:
