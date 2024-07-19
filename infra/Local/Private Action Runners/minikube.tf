@@ -93,6 +93,11 @@ resource "helm_release" "runner_scale_set" {
   }
 
   set {
+    name  = "containerMode.type"
+    value = "dind"
+  }
+
+  set {
     name  = "template.spec.initContainers[0].name"
     value = "init-dind-externals"
   }
@@ -276,7 +281,6 @@ resource "helm_release" "runner_scale_set" {
     name  = "template.spec.volumes[2].emptyDir.medium"
     value = ""
   }
-
 
 }
 
