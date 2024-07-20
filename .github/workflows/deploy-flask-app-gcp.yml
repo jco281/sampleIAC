@@ -43,10 +43,12 @@ jobs:
         run: cd infra/GCP/terraform/FlaskAppExample && gcloud auth configure-docker
 
       - name: Build Docker image
-        run: cd infra/GCP/terraform/FlaskAppExample && docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest .
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest .
+        working-directory: ./infra/GCP/terraform/FlaskAppExample
 
       - name: Push Docker image
-        run: cd infra/GCP/terraform/FlaskAppExample && docker push gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest
+        working-directory: ./infra/GCP/terraform/FlaskAppExample
 
       - name: Upload app to GCS
         working-directory: ./infra/GCP/terraform/FlaskAppExample

@@ -9,7 +9,7 @@ on:
       - master
 jobs:
   terraform-compute-engine:
-    name: 'Terraform'
+    name: 'Terraform Deploy Compute Engine Test'
     runs-on: arc-runner-set
     permissions:
       contents: 'read'

@@ -4,9 +4,6 @@ githubConfigSecret: pre-defined-secret
 minRunners: 1
 maxRunners: 5
 
-containerMode:
-  type: dind
-
 template:
   spec:
     initContainers:
