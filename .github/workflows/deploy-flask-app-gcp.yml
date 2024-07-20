@@ -43,16 +43,16 @@ jobs:
         run: cd infra/GCP/terraform/FlaskAppExample && gcloud auth configure-docker
 
       - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest .
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/flask-app:latest .
         working-directory: ./infra/GCP/terraform/FlaskAppExample
 
       - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.GCP_PROJECT }}/flask-app:latest
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/flask-app:latest
         working-directory: ./infra/GCP/terraform/FlaskAppExample
 
       - name: Upload app to GCS
         working-directory: ./infra/GCP/terraform/FlaskAppExample
-        run: gsutil cp app.zip gs://${{ secrets.GCP_PROJECT }}-app-bucket/
+        run: gsutil cp app.zip gs://${{ secrets.GCP_PROJECT_ID }}-app-bucket/
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
