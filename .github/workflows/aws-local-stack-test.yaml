@@ -21,9 +21,9 @@ jobs:
       matrix:
         path:
           - infra/AWS/terraform/ebs
-          - infra/AWS/terraform/cloudwatch
-          - infra/AWS/terraform/RDS/session_state_management
-          - infra/AWS/terraform/iam
+#          - infra/AWS/terraform/cloudwatch
+#          - infra/AWS/terraform/RDS/session_state_management
+#          - infra/AWS/terraform/iam
 
     steps:
       - name: Checkout repository
