@@ -1,0 +1,54 @@
+name: LocalStack-AWS-Test
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  terraform:
+    runs-on: arc-runner-set
+
+    services:
+      localstack:
+        image: localstack/localstack
+        ports:
+          - 4566:4566
+        env:
+          SERVICES: s3,ec2,iam,dynamodb,cloudwatch,cloudformation,sts
+
+    strategy:
+      matrix:
+        path:
+          - infra/AWS/terraform/ebs
+          - infra/AWS/terraform/cloudwatch
+          - infra/AWS/terraform/RDS/session_state_management
+          - infra/AWS/terraform/iam
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.2
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set region us-west-2
+          aws configure set aws_access_key_id test
+          aws configure set aws_secret_access_key test
+          aws configure set output json
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ matrix.path }}
+
+      - name: Terraform Plan
+        run: terraform plan -var 'aws_endpoint=http://localhost:4566'
+        working-directory: ${{ matrix.path }}
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-west-2
