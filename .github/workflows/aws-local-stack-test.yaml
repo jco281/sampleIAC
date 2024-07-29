@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: APT updates and install zip
-        run: sudo apt-get update & sudo apt-get install unzip curl -y
+        run: sudo apt-get update & sudo apt-get install unzip curl node -y
 
       - name: Install AWS CLI
         run: |
